@@ -18,7 +18,7 @@ VALUES
   (1, 1, 'Nǐhǎo', 'Hello', 2),
   (2, 1, 'Xièxiè', 'Thank You', 3),
   (3, 1, `Bù kèqì` , `You're Wecome`, 4),
-  (4, 1, 'Zǎo ', 'Good Morning', 5),
+  (4, 1, 'Zǎo', 'Good Morning', 5),
   (5, 1, `Wǎn'ān`, 'Good Night', 6),
   (6, 1, 'Wǒ jiào.', 'My name is', 7),
   (7, 1, 'Bù shì', 'No', 8),

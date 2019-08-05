@@ -46,7 +46,7 @@ const UserService = {
       const [languageId] = await trx
         .into('language')
         .insert([
-          { name: 'French', user_id },
+          { name: 'Mandarin', user_id },
         ], ['id'])
 
       // when inserting words,
@@ -58,14 +58,14 @@ const UserService = {
         .first()
 
       const languageWords = [
-        ['entraine toi', 'practice', 2],
-        ['bonjour', 'hello', 3],
-        ['maison', 'house', 4],
-        ['développeur', 'developer', 5],
-        ['traduire', 'translate', 6],
-        ['incroyable', 'amazing', 7],
-        ['chien', 'dog', 8],
-        ['chat', 'cat', null],
+        ['Nǐhǎo', 'Hello', 2],
+        ['Xièxiè', 'Thank You', 3],
+        [`Bù kèqì` , `You're Wecome`, 4],
+        ['Zǎo ', 'Good Morning', 5],
+        [`Wǎn'ān`, 'Good Night', 6],
+        ['Wǒ jiào.', 'My name is', 7],
+        ['Bù shì', 'No', 8],
+        ['Shì', 'Yes', null],
       ]
 
       const [languageHeadId] = await trx
