@@ -39,6 +39,16 @@ const LanguageService = {
       )
       .where('word.id', language.head)
   },
+  getNextWord(db, language) {
+    return db
+      .from('word')
+      .select(
+        'next',
+        'correct_count',
+        'incorrect_count',
+      )
+      .where('word.id', (parseInt(language.head) + 1))
+  },
 
 }
 

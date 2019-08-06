@@ -49,18 +49,21 @@ languageRouter
     let wordCorrectCount;
     let wordIncorrectCount;
     let currentWord = { nextWord, totalScore, wordCorrectCount, wordIncorrectCount }
+    currentWord.totalScore = req.language.total_score;
     try {
-      const word = await LanguageService.getCurrentWord(
+      await LanguageService.getCurrentWord(
         req.app.get('db'),
         req.language
       )
-      currentWord.nextWord = word.next
-      currentWord.totalScore = req.language.total_score;
-      currentWord.wordCorrectCount = word.correct_count
-      currentWord.wordIncorrectCount = word.incorrect_count
-      res.json({
-        currentWord
+      .then(word => {
+        console.log(word)
+        currentWord.nextWord = word[0].next
+        currentWord.wordCorrectCount = word[0].correct_count
+        currentWord.wordIncorrectCount = word[0].incorrect_count
       })
+      res.json(
+        currentWord
+      )
       next()
     } catch (error) {
       next(error)
