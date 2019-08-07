@@ -57,8 +57,30 @@ languageRouter.get('/head', async (req, res, next) => {
   
 
 languageRouter.post('/guess', async (req, res, next) => {
-  // implement me
+  const {answer, id} = req.body
+  const language = await LanguageService.getUsersLanguage(
+    req.app.get('db'), req.user.id)
+  const words = await LanguageService.getLanguageWords(
+      req.app.get('db'),
+      language.id
+    );
+  
+  const ll = LanguageService.populateLinkedList(words)
+  const translation = await LanguageService.checkUsersGuess(
+    req.app.get('db'), id
+  )
+  .then(word => {
+    if (answer.value !== word.translation) {
+    //  if answer is incorrect
+    //    set memory value 
+    //    increment incorrect count
+    }
+    //  set memory value 
+    //  increment correct count
+    //  increment total score
+  })
   res.send('implement me!');
+  res.send(200)
 });
 
 module.exports = languageRouter;

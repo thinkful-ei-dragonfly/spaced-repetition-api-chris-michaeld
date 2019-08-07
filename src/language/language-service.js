@@ -1,3 +1,5 @@
+const LinkedList = require('../LinkedList/linked-list')
+
 const LanguageService = {
   getUsersLanguage(db, user_id) {
     return db
@@ -46,6 +48,20 @@ const LanguageService = {
       .select('id', 'next', 'original', 'correct_count', 'incorrect_count')
       .where({ id })
       .first();
+  },
+
+  checkUsersGuess(db, id) {
+    return db 
+      .from('word')
+      .select('translation', 'original')
+      .where('word.id', id)
+  },
+
+  populateLinkedList(words) {
+    const linkedList = new LinkedList()
+
+    words.forEach(word => linkedList.insertLast(word))
+    linkedList.display()
   }
 };
 
