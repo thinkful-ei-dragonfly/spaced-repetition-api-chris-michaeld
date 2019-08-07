@@ -66,19 +66,20 @@ languageRouter.post('/guess', async (req, res, next) => {
     );
   
   const ll = LanguageService.populateLinkedList(words)
-  const translation = await LanguageService.checkUsersGuess(
+  const word = await LanguageService.checkUsersGuess(
     req.app.get('db'), id
-  )
-  .then(word => {
+  );
     if (answer.value !== word.translation) {
     //  if answer is incorrect
+    await LanguageService.decrementCount(ll, word.id)
     //    set memory value 
+
     //    increment incorrect count
     }
     //  set memory value 
     //  increment correct count
     //  increment total score
-  })
+  
   res.send('implement me!');
   res.send(200)
 });

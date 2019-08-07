@@ -31,13 +31,6 @@ const LanguageService = {
       .where({ language_id });
   },
 
-  getCurrentWord(db, language) {
-    return db
-      .from('word')
-      .select('next', 'correct_count', 'incorrect_count')
-      .where('word.id', language.head);
-  },
-
   // get next word has to take in (db, id) (NOT db, language)
   // since you call this method on a word. Words are like _Nodes
   // WORDS = array of word {objects}; like _Nodes
@@ -45,7 +38,7 @@ const LanguageService = {
   getNextWord(db, id) {
     return db
       .from('word')
-      .select('id', 'next', 'original', 'correct_count', 'incorrect_count')
+      .select('*')
       .where({ id })
       .first();
   },
@@ -53,7 +46,7 @@ const LanguageService = {
   checkUsersGuess(db, id) {
     return db 
       .from('word')
-      .select('translation', 'original')
+      .select('translation', 'original', 'id')
       .where('word.id', id)
   },
 
@@ -61,8 +54,24 @@ const LanguageService = {
     const linkedList = new LinkedList()
 
     words.forEach(word => linkedList.insertLast(word))
-    linkedList.display()
-  }
+    return linkedList
+  },
+  incrementWord() {
+    const word = ll.find(id)
+    word.correct_count +=1
+    return
+  },
+  decrementWord(ll, id) {
+    const word = ll.find(id)
+    word.incorrect_count +=1
+    return
+  },
+  updateMemoryValue() {
+
+  },
+  persistLinkedListInDatabase() {
+
+  },
 };
 
 module.exports = LanguageService;
