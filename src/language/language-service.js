@@ -7,10 +7,10 @@ const LanguageService = {
         'language.name',
         'language.user_id',
         'language.head',
-        'language.total_score',
+        'language.total_score'
       )
       .where('language.user_id', user_id)
-      .first()
+      .first();
   },
 
   getLanguageWords(db, language_id) {
@@ -24,32 +24,29 @@ const LanguageService = {
         'next',
         'memory_value',
         'correct_count',
-        'incorrect_count',
+        'incorrect_count'
       )
-      .where({ language_id })
+      .where({ language_id });
   },
 
   getCurrentWord(db, language) {
     return db
       .from('word')
-      .select(
-        'next',
-        'correct_count',
-        'incorrect_count',
-      )
-      .where('word.id', language.head)
+      .select('next', 'correct_count', 'incorrect_count')
+      .where('word.id', language.head);
   },
-  getNextWord(db, language) {
+
+  // get next word has to take in (db, id) (NOT db, language)
+  // since you call this method on a word. Words are like _Nodes
+  // WORDS = array of word {objects}; like _Nodes
+  // LANGUAGE = list of words
+  getNextWord(db, id) {
     return db
       .from('word')
-      .select(
-        'next',
-        'correct_count',
-        'incorrect_count',
-      )
-      .where('word.id', (parseInt(language.head) + 1))
-  },
+      .select('id', 'next', 'original', 'correct_count', 'incorrect_count')
+      .where({ id })
+      .first();
+  }
+};
 
-}
-
-module.exports = LanguageService
+module.exports = LanguageService;
