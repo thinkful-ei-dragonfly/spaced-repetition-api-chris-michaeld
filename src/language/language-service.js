@@ -61,20 +61,35 @@ const LanguageService = {
     return linkedList;
   },
 
-  persistLinkedListInDatabase(db, list) {
-    //make make the LL an Array so it can
-    // be passed to the DB from server
-    const tempArray = [];
+  // persistLinkedListInDatabase(db, list) {
+  //   //make make the LL an Array so it can
+  //   // be passed to the DB from server
+  //   const tempArray = [];
 
-    tempArray.push(
-      db('language')
-        .where('id', list.id)
-        .update({
-          total_score: list.total_score,
-          head: list.head.value.id
-        })
-    );
-  }
+  //   tempArray.push(
+  //     db('language')
+  //       .where('id', list.id)
+  //       .update({
+  //         total_score: list.total_score,
+  //         head: list.head.value.id
+  //       })
+  //   );
+
+  //   list.mapList(word => {
+  //     tempArray.push(
+  //       db('word')
+  //         .where('id', word.value.id)
+  //         .update({
+  //         memory_value: word.memory_value,
+  //         correct_count: word.correct_count,
+  //         incorrect_count: word.incorrect_count,
+  //         next: word.next,
+  //         })
+  //     )
+  //     return tempArray
+  //       })
+  //     ;
 };
+
 
 module.exports = LanguageService;
