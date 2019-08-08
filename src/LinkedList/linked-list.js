@@ -194,7 +194,7 @@ class LinkedList {
     let node = this.head;
     let arr = [];
     while (node) {
-      arr.push(callback(node.value));
+      arr.push(node.value);
       node = node.next;
     }
     return arr;

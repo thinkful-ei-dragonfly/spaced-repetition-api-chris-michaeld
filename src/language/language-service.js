@@ -79,8 +79,24 @@ const LanguageService = {
         })
     );
   },
+  // truncateWords(db, id) {
+  //   return db 
+  //     .from('word')
+  //     .delete()
+  //     .where('language.user_id', 'id')
 
-  
+  // },
+  persistLinkedList(db, words) {
+    return db
+      .from('word')
+      .update('*')
+      .next value and memory value
+      .returning('*')
+      .then(([word]) => word)
+
+  },
+
+
 };
 
 module.exports = LanguageService;

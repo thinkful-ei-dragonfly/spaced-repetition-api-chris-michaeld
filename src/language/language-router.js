@@ -93,7 +93,7 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
       isCorrect: false
     }
     //check if guess === head.value.translation 
-     //if correct
+    //if correct
     if (guess === ll.head.value.translation) {
       //increment correct count
       ll.head.value.correct_count++;
@@ -103,14 +103,14 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
       ll.total_score = ll.total_score + 1;
       //changes answer 
       answer.isCorrect = true;
-      
+
     } else {
       //increment incorrect count
       ll.head.value.incorrect_count++;
       //memory value is 1 
       ll.head.value.memory_value = 1;
     }
-    
+
     const memoryValue = ll.head.value.memory_value
     if (memoryValue > ll.size()) {
       memoryValue = ll.size()
@@ -119,21 +119,31 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
     ll.head = head.next;
 
     ll.insertAt(head, memoryValue)
-    
+
     answer.nextWord = ll.head.value.original
     answer.wordCorrectCount = ll.head.value.correct_count
     answer.wordIncorrectCount = ll.head.value.incorrect_count
     answer.totalScore = ll.total_score
     answer.answer = head.value.translation
 
-    function turnObjectIntoArray(object) {
-      return Object.entries(object)
-    }
-    console.log(ll.mapList(turnObjectIntoArray))
+
+    // function turnObjectIntoArray(object) {
+    //   return Object.entries(object)
+    // }
+
+    const arrays = ll.mapList()
+    console.log(arrays)
+    // LanguageService.insertWord()
+   
+    // var merged = [].concat.apply([], arrays);
+
+    
+
+   
     //persist LinkedList
 
     //move data to answer variable for response to client 
-    
+
 
     res.json({
       answer,
