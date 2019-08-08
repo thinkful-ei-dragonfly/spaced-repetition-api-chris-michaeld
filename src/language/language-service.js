@@ -61,58 +61,26 @@ const LanguageService = {
     return linkedList;
   },
 
-<<<<<<< HEAD
-  // persistLinkedListInDatabase(db, list) {
-  //   //make make the LL an Array so it can
-  //   // be passed to the DB from server
-  //   const tempArray = [];
-
-  //   tempArray.push(
-  //     db('language')
-  //       .where('id', list.id)
-  //       .update({
-  //         total_score: list.total_score,
-  //         head: list.head.value.id
-  //       })
-  //   );
-
-  //   list.mapList(word => {
-  //     tempArray.push(
-  //       db('word')
-  //         .where('id', word.value.id)
-  //         .update({
-  //         memory_value: word.memory_value,
-  //         correct_count: word.correct_count,
-  //         incorrect_count: word.incorrect_count,
-  //         next: word.next,
-  //         })
-  //     )
-  //     return tempArray
-  //       })
-  //     ;
-=======
   persistLinkedListInDatabase(db, list) {
-    return db 
-      .truncate('word')
-      .where('word.language_id', list.id)
-      .insert()
-    //make make the LL an Array so it can
-    // be passed to the DB from server
-    const tempArray = [];
+    let tempArray = [];
+    let tempCurrNode = list.head;
+    while (tempCurrNode !== null) {
+      tempArray.push(tempCurrNode.value);
+      tempCurrNode = tempCurrNode.next;
+    }
 
-    tempArray.push(
-      db('language')
-        .where('id', list.id)
-        .update({
-          total_score: list.total_score,
-          head: list.head.value.id
-        })
-    );
-  },
-
-  
->>>>>>> master
+    return tempArray.mapList((item, index) => {
+      const returnObj = {
+        memory_value: item.memory_value,
+        correct_count: item.correct_count,
+        incorrect_count: item.incorrect_count,
+        next: tempArray[index].id
+      };
+      return db('word')
+        .update(returnObj)
+        .where('id', item.id);
+    });
+  }
 };
-
 
 module.exports = LanguageService;
