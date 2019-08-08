@@ -179,6 +179,8 @@ class LinkedList {
   }
 
   //add mapList method to show as Arr[]
+  //use this in service to communicate
+  //data between server and DB
   mapList(callback) {
     let node = this.head;
     let arr = [];

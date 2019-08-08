@@ -1,4 +1,4 @@
-const {LinkedList} = require('../LinkedList/linked-list');
+const { LinkedList } = require('../LinkedList/linked-list');
 
 const LanguageService = {
   getUsersLanguage(db, user_id) {
@@ -43,12 +43,11 @@ const LanguageService = {
       .first();
   },
 
-
   populateLinkedList(language, words) {
     const linkedList = new LinkedList({
       id: language.id,
       name: language.name,
-      total_score: language.total_score,
+      total_score: language.total_score
     });
     let word = words.find(w => w.id === language.head);
     linkedList.insertFirst(word);
@@ -62,10 +61,20 @@ const LanguageService = {
     return linkedList;
   },
 
-  persistLinkedListInDatabase() {
+  persistLinkedListInDatabase(db, list) {
+    //make make the LL an Array so it can
+    // be passed to the DB from server
+    const tempArray = [];
 
-  },
-
+    tempArray.push(
+      db('language')
+        .where('id', list.id)
+        .update({
+          total_score: list.total_score,
+          head: list.head.value.id
+        })
+    );
+  }
 };
 
 module.exports = LanguageService;
