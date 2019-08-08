@@ -62,6 +62,10 @@ const LanguageService = {
   },
 
   persistLinkedListInDatabase(db, list) {
+    return db 
+      .truncate('word')
+      .where('word.language_id', list.id)
+      .insert()
     //make make the LL an Array so it can
     // be passed to the DB from server
     const tempArray = [];
@@ -74,7 +78,9 @@ const LanguageService = {
           head: list.head.value.id
         })
     );
-  }
+  },
+
+  
 };
 
 module.exports = LanguageService;
