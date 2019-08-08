@@ -61,6 +61,7 @@ const LanguageService = {
     return linkedList;
   },
 
+<<<<<<< HEAD
   // persistLinkedListInDatabase(db, list) {
   //   //make make the LL an Array so it can
   //   // be passed to the DB from server
@@ -89,6 +90,28 @@ const LanguageService = {
   //     return tempArray
   //       })
   //     ;
+=======
+  persistLinkedListInDatabase(db, list) {
+    return db 
+      .truncate('word')
+      .where('word.language_id', list.id)
+      .insert()
+    //make make the LL an Array so it can
+    // be passed to the DB from server
+    const tempArray = [];
+
+    tempArray.push(
+      db('language')
+        .where('id', list.id)
+        .update({
+          total_score: list.total_score,
+          head: list.head.value.id
+        })
+    );
+  },
+
+  
+>>>>>>> master
 };
 
 

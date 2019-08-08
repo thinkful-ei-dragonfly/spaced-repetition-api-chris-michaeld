@@ -1,35 +1,22 @@
-//Changed node constructor so that all  "item"
-// each item is an object of "values"
-// can be passed in
 class _Node {
-  constructor({ value, next }) {
+  constructor(value, next) {
     this.value = value;
     this.next = next;
   }
 }
 
-//changed linked list to incorporate all "value"s
-// constructor now takes in id, name, tot_score
-// ----------------------------------------------
 class LinkedList {
   constructor({ id, name, total_score }) {
+    this.head = null;
     this.id = id;
     this.name = name;
     this.total_score = total_score;
-    this.head = null;
   }
-
-  // changed insertFirst to put incorrect item{} that need to
-  //be correct at head until they are correct
 
   insertFirst(item) {
-    this.head = new _Node({
-      item,
-      next: this.head
-    });
+    this.head = new _Node(item, this.head);
   }
 
-  //same changes as insertFirst
   insertLast(item) {
     if (this.head === null) {
       this.insertFirst(item);
@@ -38,52 +25,66 @@ class LinkedList {
       while (tempNode.next !== null) {
         tempNode = tempNode.next;
       }
-      tempNode.next = new _Node({ item, next: null });
+      tempNode.next = new _Node(item, null);
     }
   }
 
-  //again, node as object
-  insertBefore(item, nodeKey) {
+
+  // insertBefore(item, nodeKey) {
+  //     if (!this.head) {
+  //       return null;
+  //     }
+  //     // console.log(item)
+  //     console.log(nodeKey)
+  //     // if (this.head.value === item) {
+  //     //   this.insertFirst(item);
+  //     //   return;
+  //     // }
+
+  //     let newNode = new _Node(item, null);
+
+  //     let currNode = this.head;
+  //     let prevNode = this.head;
+
+  //     while (currNode !== null) {
+  //       prevNode = currNode;
+  //       currNode = currNode.next;
+
+  //       if (currNode === null) {
+  //         console.log('Item not found');
+  //         return;
+  //       }
+
+  //       if (currNode.value.id === nodeKey) {
+  //         prevNode.next = newNode;
+  //         newNode.next = currNode;
+  //         return;
+  //       }
+  //     }
+  //   }
+
+  insertAt(item, position) {
+    let currNode = this.head;
     if (!this.head) {
       return null;
     }
 
-    if (this.head.value === item) {
+    if (position === 0) {
       this.insertFirst(item);
-      return;
-    }
-
-    //node as obj{}
-    let newNode = new _Node({ item, next: null });
-
-    let currNode = this.head;
-    let prevNode = this.head;
-
-    while (currNode !== null) {
-      prevNode = currNode;
-      currNode = currNode.next;
-
-      if (currNode === null) {
-        console.log('Item not found');
-        return;
+    } else {
+      for (let i = 0; i < position - 1; i++) {
+        if (currNode.next === null) {
+          currNode.next = new _Node(item, null);
+          return;
+        }
+        currNode = currNode.next;
       }
 
-      if (currNode.value === nodeKey) {
-        prevNode.next = newNode;
-        newNode.next = currNode;
-        return;
-      }
+      let newNode = new _Node(item.value, currNode.next);
+      newNode.value.next = currNode.next.value.id;
+      currNode.value.next = newNode.value.id;
+      currNode.next = newNode;
     }
-  }
-
-  //does not need change b/c
-  //this.insertBefore creates new _Node{}
-  insertAt(pos, item) {
-    let currNode = this.head;
-    for (let i = 0; i < pos; i++) {
-      currNode = currNode.next;
-    }
-    this.insertBefore(item, currNode.value);
   }
 
   insertAfter(item, nodeKey) {
@@ -96,7 +97,7 @@ class LinkedList {
       return;
     }
 
-    let newNode = new _Node({ item, next: null });
+    let newNode = new _Node(item, null);
 
     let currNode = this.head;
 
@@ -116,7 +117,6 @@ class LinkedList {
     }
   }
 
-  //same, new _Node as {}
   insertLastCycle(item, node) {
     if (this.head === null) {
       this.insertFirst(item);
@@ -125,7 +125,7 @@ class LinkedList {
       while (tempNode.next !== null) {
         tempNode = tempNode.next;
       }
-      tempNode.next = new _Node({ item, node });
+      tempNode.next = new _Node(item, node);
       console.log('a string');
     }
   }
@@ -169,13 +169,22 @@ class LinkedList {
     return;
   }
 
-  //displays as LL
   display() {
     let currNode = this.head;
     while (currNode !== null) {
-      console.log(currNode.value);
+      console.log(currNode.value.original);
       currNode = currNode.next;
     }
+  }
+
+  size() {
+    let currNode = this.head;
+    let counter = 0;
+    while (currNode !== null) {
+      counter += 1;
+      currNode = currNode.next;
+    }
+    return counter;
   }
 
   //add mapList method to show as Arr[]
@@ -185,11 +194,16 @@ class LinkedList {
     let node = this.head;
     let arr = [];
     while (node) {
-      arr.push(callback(node));
+      arr.push(callback(node.value));
       node = node.next;
     }
     return arr;
   }
+
+  
 }
+
+
+
 
 module.exports = { _Node, LinkedList };

@@ -68,7 +68,13 @@ languageRouter.get('/head', async (req, res, next) => {
 //added express jsonBodyParser and try catch blocks to
 // debug responses better
 languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
+<<<<<<< HEAD
   const {guess} = req.body;
+=======
+  const { guess } = req.body;
+
+  console.log(guess)
+>>>>>>> master
 
   if (!guess) {
     return res.status(400).json({ error: `Missing 'guess' in request body` });
@@ -84,8 +90,56 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
     const ll = LanguageService.populateLinkedList(
       req.language,
       words,
-      );
+    );
 
+    //store answer in a variable 
+    const answer = {
+      isCorrect: false
+    }
+    //check if guess === head.value.translation 
+     //if correct
+    if (guess === ll.head.value.translation) {
+      //increment correct count
+      ll.head.value.correct_count++;
+      //memory value is *2
+      ll.head.value.memory_value *= 2;
+      //increment total score
+      ll.total_score = ll.total_score + 1;
+      //changes answer 
+      answer.isCorrect = true;
+      
+    } else {
+      //increment incorrect count
+      ll.head.value.incorrect_count++;
+      //memory value is 1 
+      ll.head.value.memory_value = 1;
+    }
+    
+    const memoryValue = ll.head.value.memory_value
+    if (memoryValue > ll.size()) {
+      memoryValue = ll.size()
+    }
+    const head = ll.head;
+    ll.head = head.next;
+
+    ll.insertAt(head, memoryValue)
+    
+    answer.nextWord = ll.head.value.original
+    answer.wordCorrectCount = ll.head.value.correct_count
+    answer.wordIncorrectCount = ll.head.value.incorrect_count
+    answer.totalScore = ll.total_score
+    answer.answer = head.value.translation
+
+    function turnObjectIntoArray(object) {
+      return Object.entries(object)
+    }
+    console.log(ll.mapList(turnObjectIntoArray))
+    //persist LinkedList
+
+    //move data to answer variable for response to client 
+    
+
+<<<<<<< HEAD
 
    
 
@@ -95,6 +149,11 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
     res.json({
       ll,
       guess
+=======
+    res.json({
+      answer,
+      ll
+>>>>>>> master
     });
   } catch (error) {
     next(error);
