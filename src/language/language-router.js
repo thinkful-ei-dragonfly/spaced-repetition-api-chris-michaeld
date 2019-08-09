@@ -114,9 +114,8 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
       memoryValue = ll.size()
     }
     const head = ll.head;
-    ll.head = head.next;
-
     ll.insertAt(head, memoryValue)
+    ll.head = head.next;
 
     answer.nextWord = ll.head.value.original
     answer.wordCorrectCount = ll.head.value.correct_count
@@ -131,10 +130,9 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
     LanguageService.persistLinkedListHead(req.app.get('db'), ll)
 
 
-    res.json({
-      answer,
-      ll
-    });
+    res.json(
+      answer
+      );
   } catch (error) {
     next(error);
   }
