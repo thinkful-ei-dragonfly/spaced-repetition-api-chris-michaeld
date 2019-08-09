@@ -63,9 +63,9 @@ class LinkedList {
       }
     }
 
-  insertAt(item, position) {
-    let currNode = this.head;
-    if (!this.head) {
+  swapNodes(item, position) {
+    let currNode = item;
+    if (!item) {
       return null;
     }
 
@@ -73,18 +73,18 @@ class LinkedList {
       this.insertFirst(item);
     } else {
       for (let i = 0; i < position - 1; i++) {
-        if (currNode.next === null) {
-          currNode.next = new _Node(item, null);
-          return;
+        if (!currNode.next) {
+          break;
         }
         currNode = currNode.next;
       }
 
-      let newNode = new _Node(item.value, currNode.next);
-      newNode.value.next = currNode.value.next;
-      currNode.value.next = newNode.value.id;
-      currNode.next = newNode;
+      item.next = currNode.next;
+      item.value.next = currNode.value.next;
+      currNode.value.next = item.value.id;
+      currNode.next = item;
     }
+    this.head = this.head.next
   }
 
   insertAfter(item, nodeKey) {
