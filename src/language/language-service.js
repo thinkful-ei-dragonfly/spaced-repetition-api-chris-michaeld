@@ -31,10 +31,6 @@ const LanguageService = {
       .where({ language_id });
   },
 
-  // get next word has to take in (db, id) (NOT db, language)
-  // since you call this method on a word. Words are like _Nodes
-  // WORDS = array of word {objects}; like _Nodes
-  // LANGUAGE = list of words
   getNextWord(db, id) {
     return db
       .from('word')

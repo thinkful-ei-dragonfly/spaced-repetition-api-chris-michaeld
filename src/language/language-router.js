@@ -3,7 +3,6 @@ const LanguageService = require('./language-service');
 const { requireAuth } = require('../middleware/jwt-auth');
 
 const languageRouter = express.Router();
-//helps debug responses
 const jsonBodyParser = express.json();
 
 languageRouter.use(requireAuth).use(async (req, res, next) => {
@@ -65,73 +64,62 @@ languageRouter.get('/head', async (req, res, next) => {
   }
 });
 
-//added express jsonBodyParser and try catch blocks to
+// added express jsonBodyParser and try catch blocks to
 // debug responses better
 languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
 
   if (!req.body.guess) {
     return res.status(400).json({ error: `Missing 'guess' in request body` });
   }
-
   try {
     const words = await LanguageService.getLanguageWords(
       req.app.get('db'),
       req.language.id
     );
-
-    //make a linked list from the users lang
+    
+    // Make a Linked List
     const ll = LanguageService.populateLinkedList(
       req.language,
       words,
     );
 
-    //store answer in a variable 
+    // add correctness to answer
     const answer = {
       isCorrect: false
     }
-    //check if guess === head.value.translation 
-    //if correct
-    if (req.body.guess === ll.head.value.translation) {
-      //increment correct count
+
+    // compare guess to real translation
+    if (req.body.guess.toLowerCase() === ll.head.value.translation) {
       ll.head.value.correct_count++;
-      //memory value is *2
       ll.head.value.memory_value *= 2;
-      //increment total score
       ll.total_score = ll.total_score + 1;
-      //changes answer 
       answer.isCorrect = true;
 
     } else {
-      //increment incorrect count
       ll.head.value.incorrect_count++;
-      //memory value is 1 
       ll.head.value.memory_value = 1;
     }
-
-    let memoryValue = ll.head.value.memory_value
-    console.log(ll.size(), 'size')
+    // begin memory value check to find where to place
+    // cap memory value at linked list size in case memory
+    let memoryValue = ll.head.value.memory_value 
     if (memoryValue > ll.size()) {
       memoryValue = ll.size()
     }
+    // swap nodes depending on memory_value
     const head = ll.head;
     ll.head = head.next;
     ll.swapNodes(head, memoryValue)
-
 
     answer.nextWord = ll.head.value.original
     answer.wordCorrectCount = ll.head.value.correct_count
     answer.wordIncorrectCount = ll.head.value.incorrect_count
     answer.totalScore = ll.total_score
     answer.answer = head.value.translation
-    console.log(answer)
+
+    //create array from linkedList
     const array = ll.mapList()
     LanguageService.persist(req.app.get('db'), ll, array)
-    // arrays.forEach(node => {
-    //   LanguageService.persistLinkedListWords(req.app.get('db'), node)
-    // })
-    // LanguageService.persistLinkedListHead(req.app.get('db'), ll)
-
-
+  
     res.json(
       answer
     );
