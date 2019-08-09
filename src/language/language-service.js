@@ -60,40 +60,29 @@ const LanguageService = {
     }
     return linkedList;
   },
-
-  persistLinkedListInDatabase(db, list) {
-    return db 
-      .truncate('word')
-      .where('word.language_id', list.id)
-      .insert()
-    //make make the LL an Array so it can
-    // be passed to the DB from server
-    const tempArray = [];
-
-    tempArray.push(
-      db('language')
-        .where('id', list.id)
-        .update({
-          total_score: list.total_score,
-          head: list.head.value.id
-        })
-    );
+  persistLinkedListWords(db, node) {
+    return db.transaction(transaction =>
+    db('word')
+      .transacting(transaction)
+      .where('id', node.id)
+      .update({
+        memory_value: node.memory_value,
+        correct_count: node.correct_count,
+        incorrect_count: node.incorrect_count,
+        next: node.next ? node.next : null,
+      })
+    )
   },
-  // truncateWords(db, id) {
-  //   return db 
-  //     .from('word')
-  //     .delete()
-  //     .where('language.user_id', 'id')
-
-  // },
-  persistLinkedList(db, words) {
-    return db
-      .from('word')
-      .update('*')
-      .next value and memory value
-      .returning('*')
-      .then(([word]) => word)
-
+  persistLinkedListHead(db, ll) {
+    return db.transaction(transaction =>
+      db('language')
+        .transacting(transaction)
+        .where('id', ll.id)
+        .update({
+          total_score: ll.total_score,
+          head: ll.head.value.id,
+        })
+    )
   },
 
 

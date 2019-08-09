@@ -68,11 +68,8 @@ languageRouter.get('/head', async (req, res, next) => {
 //added express jsonBodyParser and try catch blocks to
 // debug responses better
 languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
-  const { guess } = req.body;
 
-  console.log(guess)
-
-  if (!guess) {
+  if (!req.body.guess) {
     return res.status(400).json({ error: `Missing 'guess' in request body` });
   }
 
@@ -94,7 +91,7 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
     }
     //check if guess === head.value.translation 
     //if correct
-    if (guess === ll.head.value.translation) {
+    if (req.body.guess === ll.head.value.translation) {
       //increment correct count
       ll.head.value.correct_count++;
       //memory value is *2
@@ -125,30 +122,16 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
     answer.wordIncorrectCount = ll.head.value.incorrect_count
     answer.totalScore = ll.total_score
     answer.answer = head.value.translation
-
-
-    // function turnObjectIntoArray(object) {
-    //   return Object.entries(object)
-    // }
+    console.log(answer)
 
     const arrays = ll.mapList()
-    console.log(arrays)
-    // LanguageService.insertWord()
-   
-    // var merged = [].concat.apply([], arrays);
-
+    arrays.forEach(node => LanguageService.persistLinkedListWords(req.app.get('db'),node))
+    LanguageService.persistLinkedListHead(req.app.get('db'), ll)
     
 
-   
-    //persist LinkedList
-
-    //move data to answer variable for response to client 
-
-
-    res.json({
+    res.json(
       answer,
-      ll
-    });
+    );
   } catch (error) {
     next(error);
   }
