@@ -117,18 +117,18 @@ class LinkedList {
     }
   }
 
-  insertLastCycle(item, node) {
-    if (this.head === null) {
-      this.insertFirst(item);
-    } else {
-      let tempNode = this.head;
-      while (tempNode.next !== null) {
-        tempNode = tempNode.next;
-      }
-      tempNode.next = new _Node(item, node);
-      console.log('a string');
-    }
-  }
+  // insertLastCycle(item, node) {
+  //   if (this.head === null) {
+  //     this.insertFirst(item);
+  //   } else {
+  //     let tempNode = this.head;
+  //     while (tempNode.next !== null) {
+  //       tempNode = tempNode.next;
+  //     }
+  //     tempNode.next = new _Node(item, node);
+  //     console.log('a string');
+  //   }
+  // }
 
   find(item) {
     let currNode = this.head;
