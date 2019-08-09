@@ -108,30 +108,31 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
       ll.head.value.memory_value = 1;
     }
 
-    const memoryValue = ll.head.value.memory_value
+    let memoryValue = ll.head.value.memory_value
+    console.log(ll.size(), 'size')
     if (memoryValue > ll.size()) {
       memoryValue = ll.size()
     }
     const head = ll.head;
-    ll.head = head.next;
-
     ll.insertAt(head, memoryValue)
+    ll.head = head.next;
 
     answer.nextWord = ll.head.value.original
     answer.wordCorrectCount = ll.head.value.correct_count
     answer.wordIncorrectCount = ll.head.value.incorrect_count
     answer.totalScore = ll.total_score
     answer.answer = head.value.translation
-    console.log(answer)
 
     const arrays = ll.mapList()
-    arrays.forEach(node => LanguageService.persistLinkedListWords(req.app.get('db'),node))
+    arrays.forEach(node => {
+      console.log(node)
+      LanguageService.persistLinkedListWords(req.app.get('db'), node)})
     LanguageService.persistLinkedListHead(req.app.get('db'), ll)
-    
+
 
     res.json(
-      answer,
-    );
+      answer
+      );
   } catch (error) {
     next(error);
   }
