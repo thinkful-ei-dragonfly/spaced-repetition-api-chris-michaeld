@@ -72,19 +72,17 @@ class LinkedList {
     if (position === 0) {
       this.insertFirst(item);
     } else {
-      for (let i = 0; i < position - 1; i++) {
+      for (let i = 0; i < position; i++) {
         if (!currNode.next) {
           break;
         }
         currNode = currNode.next;
       }
-
       item.next = currNode.next;
       item.value.next = currNode.value.next;
       currNode.value.next = item.value.id;
       currNode.next = item;
     }
-    this.head = this.head.next
   }
 
   insertAfter(item, nodeKey) {
