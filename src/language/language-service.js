@@ -60,26 +60,29 @@ const LanguageService = {
     }
     return linkedList;
   },
-
-  persistLinkedListInDatabase(db, list) {
-    let tempArray = [];
-    let tempCurrNode = list.head;
-    while (tempCurrNode !== null) {
-      tempArray.push(tempCurrNode.value);
-      tempCurrNode = tempCurrNode.next;
-    }
-
-    return tempArray.mapList((item, index) => {
-      const returnObj = {
-        memory_value: item.memory_value,
-        correct_count: item.correct_count,
-        incorrect_count: item.incorrect_count,
-        next: tempArray[index].id
-      };
-      return db('word')
-        .update(returnObj)
-        .where('id', item.id);
-    });
+  persistLinkedListWords(db, node) {
+    return db.transaction(transaction =>
+      db('word')
+        .transacting(transaction)
+        .where('id', node.id)
+        .update({
+          memory_value: node.memory_value,
+          correct_count: node.correct_count,
+          incorrect_count: node.incorrect_count,
+          next: node.next ? node.next : null
+        })
+    );
+  },
+  persistLinkedListHead(db, ll) {
+    return db.transaction(transaction =>
+      db('language')
+        .transacting(transaction)
+        .where('id', ll.id)
+        .update({
+          total_score: ll.total_score,
+          head: ll.head.value.id
+        })
+    );
   }
 };
 

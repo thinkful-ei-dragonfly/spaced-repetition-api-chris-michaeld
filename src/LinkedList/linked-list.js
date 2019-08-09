@@ -81,7 +81,7 @@ class LinkedList {
       }
 
       let newNode = new _Node(item.value, currNode.next);
-      newNode.value.next = currNode.next.value.id;
+      newNode.value.next = currNode.value.next;
       currNode.value.next = newNode.value.id;
       currNode.next = newNode;
     }
@@ -192,12 +192,16 @@ class LinkedList {
   //data between server and DB
   mapList(callback) {
     let node = this.head;
-    let arr = [];
+    let array = [];
     while (node) {
-      arr.push(callback(node.value));
+      if (callback) {
+        array.push(callback(node.value));
+      } else {
+      array.push(node.value)
+    }
       node = node.next;
     }
-    return arr;
+    return array;
   }
 
   

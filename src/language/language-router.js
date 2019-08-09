@@ -68,11 +68,8 @@ languageRouter.get('/head', async (req, res, next) => {
 //added express jsonBodyParser and try catch blocks to
 // debug responses better
 languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
-  const { guess } = req.body;
 
-  console.log(guess)
-
-  if (!guess) {
+  if (!req.body.guess) {
     return res.status(400).json({ error: `Missing 'guess' in request body` });
   }
 
@@ -93,8 +90,8 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
       isCorrect: false
     }
     //check if guess === head.value.translation 
-     //if correct
-    if (guess === ll.head.value.translation) {
+    //if correct
+    if (req.body.guess === ll.head.value.translation) {
       //increment correct count
       ll.head.value.correct_count++;
       //memory value is *2
@@ -103,14 +100,14 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
       ll.total_score = ll.total_score + 1;
       //changes answer 
       answer.isCorrect = true;
-      
+
     } else {
       //increment incorrect count
       ll.head.value.incorrect_count++;
       //memory value is 1 
       ll.head.value.memory_value = 1;
     }
-    
+
     const memoryValue = ll.head.value.memory_value
     if (memoryValue > ll.size()) {
       memoryValue = ll.size()
@@ -119,26 +116,22 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
     ll.head = head.next;
 
     ll.insertAt(head, memoryValue)
-    
+
     answer.nextWord = ll.head.value.original
     answer.wordCorrectCount = ll.head.value.correct_count
     answer.wordIncorrectCount = ll.head.value.incorrect_count
     answer.totalScore = ll.total_score
     answer.answer = head.value.translation
+    console.log(answer)
 
-    function turnObjectIntoArray(object) {
-      return Object.entries(object)
-    }
-    console.log(ll.mapList(turnObjectIntoArray))
-    //persist LinkedList
-
-    //move data to answer variable for response to client 
+    const arrays = ll.mapList()
+    arrays.forEach(node => LanguageService.persistLinkedListWords(req.app.get('db'),node))
+    LanguageService.persistLinkedListHead(req.app.get('db'), ll)
     
 
-    res.json({
+    res.json(
       answer,
-      ll
-    });
+    );
   } catch (error) {
     next(error);
   }
