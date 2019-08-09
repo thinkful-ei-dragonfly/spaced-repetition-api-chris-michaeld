@@ -89,7 +89,7 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
     }
 
     // compare guess to real translation
-    if (req.body.guess.toLowerCase() === ll.head.value.translation) {
+    if (req.body.guess.toLowerCase() === ll.head.value.translation.toLowerCase()) {
       ll.head.value.correct_count++;
       ll.head.value.memory_value *= 2;
       ll.total_score = ll.total_score + 1;
