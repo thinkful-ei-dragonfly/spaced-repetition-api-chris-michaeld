@@ -60,7 +60,7 @@ const LanguageService = {
     }
     return linkedList;
   },
-  persist(db, ll, array) {
+  persist(db, ll) {
     return db.transaction(transaction =>
     Promise.all([
       db('language')
