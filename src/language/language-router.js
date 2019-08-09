@@ -68,13 +68,9 @@ languageRouter.get('/head', async (req, res, next) => {
 //added express jsonBodyParser and try catch blocks to
 // debug responses better
 languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
-<<<<<<< HEAD
-  const {guess} = req.body;
-=======
   const { guess } = req.body;
 
   console.log(guess)
->>>>>>> master
 
   if (!guess) {
     return res.status(400).json({ error: `Missing 'guess' in request body` });
@@ -139,21 +135,9 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
     //move data to answer variable for response to client 
     
 
-<<<<<<< HEAD
-
-   
-
-
-
-    //eventually return outcome of is correct 
-    res.json({
-      ll,
-      guess
-=======
     res.json({
       answer,
       ll
->>>>>>> master
     });
   } catch (error) {
     next(error);
