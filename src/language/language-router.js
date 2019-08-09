@@ -124,11 +124,12 @@ languageRouter.post('/guess', jsonBodyParser, async (req, res, next) => {
     answer.totalScore = ll.total_score
     answer.answer = head.value.translation
     console.log(answer)
-    const arrays = ll.mapList()
-    arrays.forEach(node => {
-      LanguageService.persistLinkedListWords(req.app.get('db'), node)
-    })
-    LanguageService.persistLinkedListHead(req.app.get('db'), ll)
+    const array = ll.mapList()
+    LanguageService.persist(req.app.get('db'), ll, array)
+    // arrays.forEach(node => {
+    //   LanguageService.persistLinkedListWords(req.app.get('db'), node)
+    // })
+    // LanguageService.persistLinkedListHead(req.app.get('db'), ll)
 
 
     res.json(
