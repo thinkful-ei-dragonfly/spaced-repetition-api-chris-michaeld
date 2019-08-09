@@ -30,38 +30,38 @@ class LinkedList {
   }
 
 
-  // insertBefore(item, nodeKey) {
-  //     if (!this.head) {
-  //       return null;
-  //     }
-  //     // console.log(item)
-  //     console.log(nodeKey)
-  //     // if (this.head.value === item) {
-  //     //   this.insertFirst(item);
-  //     //   return;
-  //     // }
+  insertBefore(item, nodeKey) {
+      if (!this.head) {
+        return null;
+      }
+      // console.log(item)
+      console.log(nodeKey)
+      // if (this.head.value === item) {
+      //   this.insertFirst(item);
+      //   return;
+      // }
 
-  //     let newNode = new _Node(item, null);
+      let newNode = new _Node(item, null);
 
-  //     let currNode = this.head;
-  //     let prevNode = this.head;
+      let currNode = this.head;
+      let prevNode = this.head;
 
-  //     while (currNode !== null) {
-  //       prevNode = currNode;
-  //       currNode = currNode.next;
+      while (currNode !== null) {
+        prevNode = currNode;
+        currNode = currNode.next;
 
-  //       if (currNode === null) {
-  //         console.log('Item not found');
-  //         return;
-  //       }
+        if (currNode === null) {
+          console.log('Item not found');
+          return;
+        }
 
-  //       if (currNode.value.id === nodeKey) {
-  //         prevNode.next = newNode;
-  //         newNode.next = currNode;
-  //         return;
-  //       }
-  //     }
-  //   }
+        if (currNode.value.id === nodeKey) {
+          prevNode.next = newNode;
+          newNode.next = currNode;
+          return;
+        }
+      }
+    }
 
   insertAt(item, position) {
     let currNode = this.head;
@@ -210,4 +210,4 @@ class LinkedList {
 
 
 
-module.exports = { _Node, LinkedList };
+module.exports = { LinkedList };
