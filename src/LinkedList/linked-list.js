@@ -35,7 +35,7 @@ class LinkedList {
         return null;
       }
       // console.log(item)
-      console.log(nodeKey)
+      
       // if (this.head.value === item) {
       //   this.insertFirst(item);
       //   return;
