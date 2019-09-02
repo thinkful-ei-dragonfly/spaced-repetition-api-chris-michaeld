@@ -60,7 +60,7 @@ const UserService = {
       const languageWords = [
         ['Nǐhǎo', 'Hello', 2],
         ['Xièxiè', 'Thank You', 3],
-        [`Bù kèqì` , `You're Wecome`, 4],
+        [`Bù kèqì` , `You're Welcome`, 4],
         ['Zǎo', 'Good Morning', 5],
         [`Wǎn'ān`, 'Good Night', 6],
         ['Wǒ jiào.', 'My name is', 7],
