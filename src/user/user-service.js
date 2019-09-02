@@ -41,54 +41,54 @@ const UserService = {
       username: user.username,
     }
   },
-  // populateUserWords(db, user_id) {
-  //   return db.transaction(async trx => {
-  //     const [languageId] = await trx
-  //       .into('language')
-  //       .insert([
-  //         { name: 'Mandarin', user_id },
-  //       ], ['id'])
+  populateUserWords(db, user_id) {
+    return db.transaction(async trx => {
+      const [languageId] = await trx
+        .into('language')
+        .insert([
+          { name: 'Mandarin', user_id },
+        ], ['id'])
 
-  //     // when inserting words,
-  //     // we need to know the current sequence number
-  //     // so that we can set the `next` field of the linked language
-  //     const seq = await db
-  //       .from('word_id_seq')
-  //       .select('last_value')
-  //       .first()
+      // when inserting words,
+      // we need to know the current sequence number
+      // so that we can set the `next` field of the linked language
+      const seq = await db
+        .from('word_id_seq')
+        .select('last_value')
+        .first()
 
-  //     const languageWords = [
-  //       ['Nǐhǎo', 'Hello', 2],
-  //       ['Xièxiè', 'Thank You', 3],
-  //       [`Bù kèqì` , `You're Wecome`, 4],
-  //       ['Zǎo', 'Good Morning', 5],
-  //       [`Wǎn'ān`, 'Good Night', 6],
-  //       ['Wǒ jiào.', 'My name is', 7],
-  //       ['Bù shì', 'No', 8],
-  //       ['Shì', 'Yes', null],
-  //     ]
+      const languageWords = [
+        ['Nǐhǎo', 'Hello', 2],
+        ['Xièxiè', 'Thank You', 3],
+        [`Bù kèqì` , `You're Wecome`, 4],
+        ['Zǎo', 'Good Morning', 5],
+        [`Wǎn'ān`, 'Good Night', 6],
+        ['Wǒ jiào.', 'My name is', 7],
+        ['Bù shì', 'No', 8],
+        ['Shì', 'Yes', null],
+      ]
 
-  //     const [languageHeadId] = await trx
-  //       .into('word')
-  //       .insert(
-  //         languageWords.map(([original, translation, nextInc]) => ({
-  //           language_id: languageId.id,
-  //           original,
-  //           translation,
-  //           next: nextInc
-  //             ? Number(seq.last_value) + nextInc
-  //             : null
-  //         })),
-  //         ['id']
-  //       )
+      const [languageHeadId] = await trx
+        .into('word')
+        .insert(
+          languageWords.map(([original, translation, nextInc]) => ({
+            language_id: languageId.id,
+            original,
+            translation,
+            next: nextInc
+              ? Number(seq.last_value) + nextInc
+              : null
+          })),
+          ['id']
+        )
 
-  //     await trx('language')
-  //       .where('id', languageId.id)
-  //       .update({
-  //         head: languageHeadId.id,
-  //       })
-  //   })
-  // },
+      await trx('language')
+        .where('id', languageId.id)
+        .update({
+          head: languageHeadId.id,
+        })
+    })
+  },
 }
 
 module.exports = UserService
